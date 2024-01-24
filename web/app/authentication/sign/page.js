@@ -1,3 +1,5 @@
+"use context"
+
 import Image from "next/image";
 
 import whiteLogo from "../../../public/logo-white.svg"
