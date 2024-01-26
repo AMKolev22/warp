@@ -14,10 +14,18 @@ import login from "../../public/log-in.svg"
 import { useSession } from 'next-auth/react'
 import React from 'react'
 import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+
+import ProjectArea from './projects'
 
 
 export default function Home(){
   const { data: session, status } = useSession();
+  const router = useRouter();
+  if (status == "unauthenticated"){
+    router.push("/api/auth/signin");
+  }
+  else{
     return(
       <div id ="dashboard flex flex-row" >
         <div className="flex flex-col items-start  __sidebar max-w-[30%] float-left">
@@ -47,9 +55,11 @@ export default function Home(){
             <Image src={home} alt={''} />
             <span className='opacity-80 text-[1.7rem] tracking-wider font-medium ml-4 align-bottom inline-block mt-1' style={{fontFamily:'Inter, sans-serif', color: "#121212"}}> / Dashboard</span>
           </div>
-          <h1 className='opacity-100 text-[2.4rem] tracking-wider font-semibold ml-24 mt-8' style={{fontFamily:'Inter, sans-serif', color: "#121212"}}>Welcome back, {session?.user.name}.</h1>
+          <h1 className='opacity-100 text-[2.4rem] tracking-wider font-semibold ml-24 mt-8' style={{fontFamily:'Inter, sans-serif', color: "#121212"}}>Welcome back, {session?.user?.name}.</h1>
+          <ProjectArea id = {20} session={session} role = {"user"} />
         </div>
       </div>
     )
   }
+}
 
