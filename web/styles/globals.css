@@ -41,6 +41,7 @@ body{
 
 hr{
   color: var(--text-dark-secondary) !important;
+  opacity: 1;
 }
 
 #cust-sh{

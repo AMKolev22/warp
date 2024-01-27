@@ -5,6 +5,7 @@ import Image from "next/image";
 import whiteLogo from "../../../public/logo-white.svg"
 import googlelogo from "../../../public/google-logo.svg"
 import githublogo from "../../../public/github-logo.svg"
+import gitlab from "../../../public/gitlab-logo.svg"
 
 
 import { Card,Typography } from "@material-tailwind/react";
@@ -20,6 +21,9 @@ export default function Sign() {
     }
     const googleSign = async (): Promise<any> => {
       await signIn("google", {redirect: false, callbackUrl: '/dashboard'});
+    }
+    const gitlabSign = async (): Promise<any> => {
+      await signIn("gitlab", {redirect: false, callbackUrl: '/dashboard'});
     }
 
     return (
@@ -37,6 +41,10 @@ export default function Sign() {
               <button className=" text-[3rem] flex items-center flex-row py-2 text-font-color rounded-2xl __btn-google mt-6  border-dark-secondary hover:-translate-y-1 bg-[#24292E] transition-all duration-300 hover:bg-[#555]" onClick={gitSign}>
                 <span className="py-[0.8rem] pl-[5rem]"><Image src={githublogo} width={25} height={25} alt={""} /></span>
                 <span className="ml-[0.8rem] text-[1.8rem] font-medium pr-[5rem] text-dark-primary antialiased tracking-wider">Continue with GitHub</span>
+              </button>
+              <button className=" text-[3rem] flex items-center flex-row py-2 text-font-color rounded-2xl __btn-google mt-6  border-dark-secondary hover:-translate-y-1 bg-[#6b4fbb] transition-all duration-300" onClick={gitlabSign}>
+                <span className="py-[0.8rem] pl-[5rem]"><Image src={gitlab} width={25} height={25} alt={""} /></span>
+                <span className="ml-[0.8rem] text-[1.8rem] font-medium pr-[5rem] text-dark-primary antialiased tracking-wider">Continue with GitLab</span>
               </button>
               <h1 className="text-[3rem] text-dark-primary mt-24 font-medium antialiased tracking-wider" >OR</h1>
               <h1 className="text-[2rem] text-dark-primary mt-20 font-medium antialiased tracking-wide" >nothing. email credentials aren't secure.</h1>
