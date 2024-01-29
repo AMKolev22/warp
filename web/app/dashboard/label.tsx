@@ -1,5 +1,3 @@
-"use client"
-
 export default function Label({role} : {role: string}){
     if (role == "admin"){
         return(

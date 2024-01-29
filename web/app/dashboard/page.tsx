@@ -56,7 +56,7 @@ export default function Home(){
             <span className='opacity-80 text-[1.7rem] tracking-wider font-medium ml-4 align-bottom inline-block mt-1' style={{fontFamily:'Inter, sans-serif', color: "#121212"}}> / Dashboard</span>
           </div>
           <h1 className='opacity-100 text-[2.4rem] tracking-wider font-semibold ml-24 mt-8' style={{fontFamily:'Inter, sans-serif', color: "#121212"}}>Welcome back, {session?.user?.name}.</h1>
-          <ProjectArea id = {20} session={session} role = {"user"} />
+          <ProjectArea session={session} role = {"user"} />
         </div>
       </div>
     )
