@@ -1,0 +1,20 @@
+    .__load {
+      position: relative;
+      text-decoration: none; /* Initial state: no underline */
+    }
+   
+   
+   .__load::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0; /* Initial width: no line */
+      height: 0.2rem; /* Height of the line */
+      background-color: black; /* Color of the line */
+      transition: width 0.3s; /* Add a smooth transition effect */
+    }
+
+    .__card:hover .__load::before {
+      width: 15%; /* Full width when hovering */
+    }

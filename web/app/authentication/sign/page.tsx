@@ -16,6 +16,7 @@ import { signIn } from "next-auth/react";
 
 
 export default function Sign() {
+  console.log(process.cwd());
     const gitSign = async (): Promise<any> => {
       await signIn("github", {redirect: false, callbackUrl: '/dashboard'});
     }
