@@ -6,6 +6,8 @@ body {
     background-color: #0A0A0A;
     font-family: "Work Sans", sans-serif;
     text-align: center;
+    letter-spacing: 2px;
+    
 }
 
 html {
@@ -37,6 +39,7 @@ html {
 
     margin-top: 2.5%;
     margin-left: 1%;
+    font-weight: bold;
 }
 
 #Contact {
@@ -137,10 +140,11 @@ html {
 
 #start>h1 {
     font-size: 130px;
+    padding-left: 5%;
 }
 
 #start-div {
-    margin-top: 15%;
+    margin-top: 10%;
     margin-left: 20%;
 
     font-size: 30px;
