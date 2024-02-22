@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "@uiw/codemirror-theme-sublime": "^4.21.22",
+    "@uiw/codemirror-themes": "^4.21.22",
+    "@uiw/react-codemirror": "^4.21.22",
     "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@codemirror/lang-javascript": "^6.2.1"
   }
 }
