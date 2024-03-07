@@ -3,7 +3,10 @@
     "@uiw/codemirror-theme-sublime": "^4.21.22",
     "@uiw/codemirror-themes": "^4.21.22",
     "@uiw/react-codemirror": "^4.21.22",
-    "fs": "^0.0.1-security"
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.8",
+    "fs": "^0.0.1-security",
+    "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
     "@codemirror/lang-javascript": "^6.2.1"
