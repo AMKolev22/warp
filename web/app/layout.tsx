@@ -2,13 +2,18 @@
 
 import "../styles/globals.css"
 import { SessionProvider } from "next-auth/react";
-import { Metadata } from 'next';
+import { Inter as FontSans } from "next/font/google"
+ 
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
  
 export default function RootLayout({ children }: { children: React.ReactNode }) {
  return (
     <html lang="en">
       <SessionProvider>
-        <body>{children}</body>
+        <body >{children}</body>
       </SessionProvider>
     </html>
   )
