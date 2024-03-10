@@ -57,6 +57,7 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import close from "../../../public/close-icon.svg"
+import { useRouter } from 'next/navigation'
 
 
 const inter = Inter({
@@ -68,6 +69,7 @@ const linkId = 'link-unique-id';
 const headingId = 'heading-unique-id';
 const paragraphId = 'paragraph-unique-id';
 const COMPONENT_MAP = { Typography, Link, Card : "div", Image : "img" };
+
 
 const DynamicComponent = ({ component, props, x, y, id }) => {
   const Component = COMPONENT_MAP[component];
@@ -81,48 +83,7 @@ const DynamicComponent = ({ component, props, x, y, id }) => {
 
 export default function Canvas() {
 
-
-useEffect(() => {
-  let actionInProgress = false;
-
-  const handleKeyDown = (e) => {
-    if (e.ctrlKey && e.key === 's') {
-      e.preventDefault();
-      if (!actionInProgress) {
-        actionInProgress = true;
-
-        const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 4000));
-
-        toast.promise(promise, {
-          loading: 'Loading...',
-          success: (data) => {
-            actionInProgress = false; 
-            return `Content has been successfully saved.`;
-          },
-          error: (err) => {
-            actionInProgress = false;
-            return 'Error';
-          },
-        });
-      }
-    }
-  };
-
-  const handleKeyUp = (e) => {
-    if (e.key === 'Control' || e.key === 's') {
-      actionInProgress = false; 
-    }
-  };
-
-  document.addEventListener('keydown', handleKeyDown);
-  document.addEventListener('keyup', handleKeyUp);
-
-  return () => {
-    document.removeEventListener('keydown', handleKeyDown);
-    document.removeEventListener('keyup', handleKeyUp);
-  };
-}, []);
-
+  const router = useRouter();
   const [isSelected, setIsSelected] = useState(false);
 
   const handleClick = () => {
@@ -146,7 +107,7 @@ useEffect(() => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const { isDraggable, show, setIsDraggable, toggleDraggable } = useDraggableContext();
+  const { isDraggable, show, setIsDraggable, toggleDraggable, toggleShow } = useDraggableContext();
   const [id, setId] = useState('');
 
   const [width, setWidth] = useState(20);
@@ -244,7 +205,7 @@ useEffect(() => {
   const LinkComponent = ({children}) => {
     const [{ isDragging }, drag] = useDrag(() => ({
       type: 'DRAGGABLE_TYPE',
-      item: { id: linkId }, // Include the type if needed
+      item: { id: linkId }, 
       collect: monitor => ({
         isDragging: !!monitor.isDragging(),
       }),
@@ -579,6 +540,72 @@ useEffect(() => {
         }
       })
 
+const save = () => {
+  const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 4000));
+
+  toast.promise(promise, {
+    loading: 'Loading...',
+    success: (data) => {
+      return `Content has been successfully saved.`;
+    },
+    error: (err) => {
+      return 'Error';
+    },
+  });
+}
+
+const toggleDrag = () => {
+toggleDraggable();
+}
+
+useEffect(() => {
+  let actionInProgress = false;
+
+  const handleKeyDown = (e) => {
+    if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
+      if (!actionInProgress) {
+        actionInProgress = true;
+        save();
+      }
+    }
+    else if (e.ctrlKey && e.key === "e") {
+      e.preventDefault();
+      if (typeof toggleShow === 'function' && !actionInProgress) {
+      toggleShow();
+      actionInProgress = true;
+      }
+    }
+    else if (e.ctrlKey && e.key === "b") {
+      e.preventDefault();
+      if (typeof toggleShow === 'function' && !actionInProgress) {
+      router.push("/dashboard")
+      }
+    }
+    else if (e.ctrlKey && e.key === "g") {
+      e.preventDefault();
+      if (typeof toggleShow === 'function' && !actionInProgress) {
+      toggleDrag();
+      }
+    }
+  };
+  const handleKeyUp = (e) => {
+    if (e.key === 'Control' || e.key === 's') {
+      actionInProgress = false; 
+    }
+  };
+
+  document.addEventListener('keydown', handleKeyDown);
+  document.addEventListener('keyup', handleKeyUp);
+
+  return () => {
+    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener('keyup', handleKeyUp);
+  };
+}, [toggleShow, toggleDraggable, router]);
+
+
+
 
 
   return (
@@ -725,7 +752,7 @@ useEffect(() => {
                     ))}
                   
               <Typography variant = "undefined" className="tracking-wider absolute ---warp-dev-paragraph draggable z-[999]">lorem ipsum dolor sit amet</Typography>
-  </div>
+            </div>
                 </TargetSurface>
               </div>
             </ContextMenuTrigger>
@@ -738,19 +765,19 @@ useEffect(() => {
               <ContextMenuLabel className={`pl-[2.3rem] text-[1.25rem] leading-[25px] tracking-wide ${inter.className} font-medium text-[#333] opacity-80`}>
                 General
               </ContextMenuLabel>
-              <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className}`}>
+              <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className}`} onClick={()=> router.push("/dashboard")}>
                 Back{' '}
                 <div className="ml-auto pl-5 text-mauve11 group-data-[highlighted]:text-[#007BFF] group-data-[disabled]:text-mauve8 tracking-wider">
                   Ctrl+B
                 </div>
               </ContextMenuItem>
-              <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className}`} onClick={() => setDialogOpen(true)}>
+              <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className}`} onClick={() => save()}>
                     Save{' '}
                 <div className="ml-auto pl-5 text-mauve11 group-data-[highlighted]:text-[#007BFF] group-data-[disabled]:text-mauve8 tracking-wider">
                   Ctrl+S
                 </div>
               </ContextMenuItem>
-              <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} mb-2`}>
+              <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} mb-2`} onClick={()=>location.reload()}>
                 Reload{' '}
                 <div className="ml-auto pl-5 text-mauve11 group-data-[highlighted]:text-[#007BFF] group-data-[disabled]:text-mauve8 tracking-wider">
                   Ctrl+R
@@ -760,19 +787,18 @@ useEffect(() => {
                 <ContextMenuLabel className={`pl-[25px] text-[1.25rem] leading-[25px] tracking-wide ${inter.className} font-medium text-[#333] opacity-80`}>
                 Low-level
               </ContextMenuLabel>
-                <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className}`}>
+                <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className}`} onClick={toggleDrag}>
                 Change Mode{' '}
                 <div className="ml-auto pl-5 text-mauve11 group-data-[highlighted]:text-[#007BFF] group-data-[disabled]:text-mauve8 tracking-wider">
                   Ctrl+G
                 </div>
               </ContextMenuItem>
-                <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} mb-3`}>
+                <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} mb-3`} onClick={toggleShow}>
                 Show Editor{' '}
                 <div className="ml-auto pl-5 text-mauve11 group-data-[highlighted]:text-[#007BFF] group-data-[disabled]:text-mauve8 tracking-wider">
                   Ctrl+E
                 </div>
               </ContextMenuItem>
-              
               <ContextMenuSeparator className="h-[1px] bg-[#333333] bg-opacity-40 m-[5px]" />
               <ContextMenuSub>
                 <ContextMenuSubTrigger className={`group text-[1.4rem] text-[#333333] leading-none rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[state=open]:bg-violet4 data-[state=open]:text-violet11 data-[disabled]:text-[#333] data-[disabled]:pointer-events-none  data-[highlighted]:text-[#007BFF] data-[highlighted]:data-[state=open]:bg-violet9 data-[highlighted]:data-[state=open]:text-violet1 ${inter.className} mt-2 font-normal`}>
@@ -786,7 +812,6 @@ useEffect(() => {
                   >
                     <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} hover:cursor-pointer`} onClick={() => { setDialogOpen(true); console.log('Opening dialog'); }}>
                     Share{' '}
-                    
                     </ContextMenuItem>
                     <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} hover:cursor-pointer`}>
                     Export Code{' '}
@@ -801,14 +826,14 @@ useEffect(() => {
             </ContextMenuPortal>
           </ContextMenu>
           <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                  <AlertDialogTrigger asChild />
-                  <AlertDialogPortal>
-                    <AlertDialogOverlay className="bg-[#efefef] bg-opacity-[0.1] data-[state=open]:animate-overlayShow fixed inset-0" />
-                      <AlertDialogContent className={`data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[350px] translate-x-[-50%] translate-y-[-50%] rounded-sm bg-white p-[25px] focus:outline-none tracking-wide ${inter.className} leading-[2.5rem]`} style={{borderRadius:"2px"}}>
-                        <p className='absolute left-0 ml-6 text-[1.3rem] mt-3'>Share project</p>
-                        <Image src={close} alt="Close" width={14} height={14} className='absolute right-0 mr-6 mt-5 cursor-pointer' onClick={() => setDialogOpen(false)} />
-                      </AlertDialogContent>
-                </AlertDialogPortal>
+            <AlertDialogTrigger asChild />
+            <AlertDialogPortal>
+                <AlertDialogOverlay className="bg-[#efefef] bg-opacity-[0.1] data-[state=open]:animate-overlayShow fixed inset-0" />
+                <AlertDialogContent className={`data-[state=open]:animate-contentShow fixed top-[25%] left-[50%] max-h-[85vh] w-[90vw] max-w-[350px] translate-x-[-50%] translate-y-[-80%] rounded-sm bg-white p-[25px] focus:outline-none tracking-wide ${inter.className} leading-[2.5rem]`} style={{borderRadius:"2px"}}>
+                    <p className='absolute left-0 ml-6 text-[1.3rem] mt-3'>Share project</p>
+                    <Image src={close} alt="Close" width={14} height={14} className='absolute right-0 mr-6 mt-5 cursor-pointer' onClick={() => setDialogOpen(false)} />
+                </AlertDialogContent>
+            </AlertDialogPortal>
           </AlertDialog>
       </>
   );
