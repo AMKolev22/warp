@@ -55,10 +55,36 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-
 import close from "../../../public/close-icon.svg"
 import { useRouter } from 'next/navigation'
+import { Bold, Italic, Underline } from "lucide-react"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/ui/toggle-group"
+import {
+  Menubar,
+  MenubarCheckboxItem,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from "@/components/ui/menubar"
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const inter = Inter({
   subsets: ['latin'],
@@ -85,6 +111,7 @@ export default function Canvas() {
 
   const router = useRouter();
   const [isSelected, setIsSelected] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleClick = () => {
     setIsSelected(!isSelected);
@@ -142,6 +169,7 @@ export default function Canvas() {
   const [scale, setScale] = useState();
   const [positions, setPositions] = useState({});
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
 
 
   const ParagraphComponent = ({children}) => {
@@ -295,6 +323,7 @@ export default function Canvas() {
               x: relativeCoordinates.x,
               y: relativeCoordinates.y,
             });
+            setMenuOpen(true);
           }
           else if (item.id == "div-unique-id"){
             updateDynamicContent('add', {
@@ -606,7 +635,14 @@ useEffect(() => {
 
 
 
+  const handleEventPropagation = (event) => {
+    event.stopPropagation();
+  };
 
+  const handleOpenMenu = (event) =>{
+    event.stopPropagation();
+    setDropdown(true);
+  }
 
   return (
       <>
@@ -793,10 +829,16 @@ useEffect(() => {
                   Ctrl+G
                 </div>
               </ContextMenuItem>
-                <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} mb-3`} onClick={toggleShow}>
+                <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className}`} onClick={toggleShow}>
                 Show Editor{' '}
                 <div className="ml-auto pl-5 text-mauve11 group-data-[highlighted]:text-[#007BFF] group-data-[disabled]:text-mauve8 tracking-wider">
                   Ctrl+E
+                </div>
+              </ContextMenuItem>
+                <ContextMenuItem className={`group text-[1.4rem] leading-none text-[#333333] rounded-[0.3rem] flex items-center h-[2.5rem] px-[0.5rem] relative pl-[2.5rem] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-[#007BFF] tracking-wider ${inter.className} mb-3`} onClick={toggleShow}>
+                Toggle Pen{' '}
+                <div className="ml-auto pl-5 text-mauve11 group-data-[highlighted]:text-[#007BFF] group-data-[disabled]:text-mauve8 tracking-wider">
+                  P
                 </div>
               </ContextMenuItem>
               <ContextMenuSeparator className="h-[1px] bg-[#333333] bg-opacity-40 m-[5px]" />
@@ -831,10 +873,71 @@ useEffect(() => {
                 <AlertDialogOverlay className="bg-[#efefef] bg-opacity-[0.1] data-[state=open]:animate-overlayShow fixed inset-0" />
                 <AlertDialogContent className={`data-[state=open]:animate-contentShow fixed top-[25%] left-[50%] max-h-[85vh] w-[90vw] max-w-[350px] translate-x-[-50%] translate-y-[-80%] rounded-sm bg-white p-[25px] focus:outline-none tracking-wide ${inter.className} leading-[2.5rem]`} style={{borderRadius:"2px"}}>
                     <p className='absolute left-0 ml-6 text-[1.3rem] mt-3'>Share project</p>
-                    <Image src={close} alt="Close" width={14} height={14} className='absolute right-0 mr-6 mt-5 cursor-pointer' onClick={() => setDialogOpen(false)} />
+                    <Image src={close} alt="Close" width={14} height={14} className='absolute right-0 mt-5 mr-6 cursor-pointer' onClick={() => setDialogOpen(false)} />
                 </AlertDialogContent>
             </AlertDialogPortal>
           </AlertDialog>
+          <div className='menu absolute top-[50%] right-[50%] z-[99999] bg-[#333] flex flex-row text-[2rem] h-16 items-center' style={{fontSize:"10.5rem"}}>
+            <Menubar className={`bg-[#333] border-none h-full ${inter.className} tracking-wide text-[#efefef] menu-div`}>
+              <MenubarMenu>
+                <MenubarTrigger className='text-[1.5rem]'>Size</MenubarTrigger>
+                <MenubarContent>
+                  <MenubarItem className="text-2xl">
+                    Small <MenubarShortcut className='text-[1.2rem] tracking-wide'>15px</MenubarShortcut>
+                  </MenubarItem>
+                  <MenubarItem className='text-3xl'>
+                    Md <MenubarShortcut className='text-[1.2rem] tracking-wide'>18.75px</MenubarShortcut>
+                  </MenubarItem>
+                  <MenubarItem className='text-4xl'>
+                    Lg <MenubarShortcut className='text-[1.2rem] tracking-wide'>22.5px</MenubarShortcut>
+                  </MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarSub>
+                    <MenubarSubTrigger className='text-[1.2rem]'>Custom</MenubarSubTrigger>
+                    <MenubarSubContent className='w-[70%] hover:bg-none'>
+                      <MenubarItem
+                        onClick={handleEventPropagation}
+                        onFocus={handleEventPropagation}
+                        className='px-0 py-0 hover:bg-none w-[100%]'
+                      >
+                        <input
+                        onClick={handleEventPropagation}
+                        onFocus={handleEventPropagation}
+                        onMouseMove={handleEventPropagation}
+                        className={`h-full w-[75%] border-solid border-[0.1rem] focus:outline-none border-black px-0 py-0 mx-0 my-0 inline-block text-[1.2rem] tracking-wide ${inter.className}`}
+                        maxLength={3}
+                        ></input>
+                        <div className='flex justify-end flex-row'>
+                          <svg
+                          onClick={handleOpenMenu}
+                          onFocus={handleEventPropagation}
+                          className='absolute right-1 top-0 bottom-[50%]'
+                          width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                        </div>
+                      </MenubarItem>
+                    </MenubarSubContent>
+                  </MenubarSub>
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
+            <ToggleGroup type="multiple" className='gap-0 ml-4'>
+              <ToggleGroupItem value="bold" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full w-full" aria-label="Toggle bold">
+                <Bold className="h-10 w-10" color="#efefef" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="italic" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full"  aria-label="Toggle italic">
+                <Italic className="h-10 w-10" color="#efefef" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="underline" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full" aria-label="Toggle underline">
+                <Underline className="h-10 w-10" color="#efefef" />
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <Select open={dropdown} onOpenChange={setDropdown}>
+              <SelectContent>
+                <SelectItem value="px">px</SelectItem>
+                <SelectItem value="rem">rem (10px)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
       </>
   );
 }
