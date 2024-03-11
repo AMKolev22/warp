@@ -10,7 +10,7 @@ export default function Draggable({ children, onDragEnd, id, initialX = 0, initi
  const { isDraggable } = useDraggableContext();
   useEffect(() => {
     if (!isDraggable) {
-      return; // Exit if dragging is not enabled
+      return;
     }
 
     const interactable = interact(`#${id}`)
@@ -24,6 +24,7 @@ export default function Draggable({ children, onDragEnd, id, initialX = 0, initi
 
             target.style.transform = `translate(${x}px, ${y}px)`;
 
+
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
           },
@@ -32,7 +33,6 @@ export default function Draggable({ children, onDragEnd, id, initialX = 0, initi
             const x = parseFloat(target.getAttribute('data-x')) || 0;
             const y = parseFloat(target.getAttribute('data-y')) || 0;
 
-            // Use these values for the transform to maintain the position
             target.style.transform = `translate(${x}px, ${y}px)`;
           }
         },

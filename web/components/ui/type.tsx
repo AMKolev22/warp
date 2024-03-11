@@ -21,7 +21,7 @@ useEffect(() => {
 
   return (
     <div className="flex flex-col items-center justify-center h-[50rem] ">
-      <div className="mt-[270vh] flex flex-col items-center justify-center">
+      <div className="mt-[230vh] flex flex-col items-center justify-center">
         <div className="flex flex-col md:flex-row items-center justify-center">
           <div className="overflow-y-auto max-h-[50rem] flex flex-col items-center justify-center"></div>
           <button className="w-32 h-10 rounded-xl bg-orange-400 text-black border border-black text-orange-300 text-sm mr-4 mb-8 bg-orange-400 bg-opacity-80">
