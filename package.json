@@ -1,12 +1,14 @@
 {
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
+    "@radix-ui/react-select": "^2.0.0",
     "@uiw/codemirror-theme-sublime": "^4.21.22",
     "@uiw/codemirror-themes": "^4.21.22",
     "@uiw/react-codemirror": "^4.21.22",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {
-    "@codemirror/lang-javascript": "^6.2.1"
+    "@codemirror/lang-javascript": "^6.2.1",
+    "aos": "^2.3.4"
   }
 }
