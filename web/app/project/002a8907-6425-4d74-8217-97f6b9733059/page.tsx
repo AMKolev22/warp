@@ -85,6 +85,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { memo } from "react"
 
 const inter = Inter({
   subsets: ['latin'],
@@ -97,14 +98,28 @@ const paragraphId = 'paragraph-unique-id';
 const COMPONENT_MAP = { Typography, Link, Card : "div", Image : "img" };
 
 
-const DynamicComponent = ({ component, props, x, y, id }) => {
+const DynamicComponent = memo(function DynamicComponent({ component, props, id }: { component: any, props: any, id: string }) {
+  const [localProps, setLocalProps] = useState(props);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const Component = COMPONENT_MAP[component];
+  useEffect(() => {
+    let itemID : string = id.replace("draggable-", "");
+    console.log(itemID)
+    const storedProps = localStorage.getItem(itemID);
+    if (storedProps) {
+      console.log(`Stored props: ${storedProps}`)
+      const parsedProps = JSON.parse(storedProps);
+      setLocalProps(parsedProps.props);
+      setPosition({ x: parsedProps.x, y: parsedProps.y });
+      console.log(parsedProps)
+    }
+  }, [id]);
+
   return (
-      <>
-        <Component {...props} style={{ position: 'absolute', left: `${x}px`, top: `${y}px` }} id = {id} />
-      </>
+    <Component {...localProps} style={{ position: 'absolute', left: `${position.x}px`, top: `${position.y}px` }} id = {id} />
   );
-};
+});
+
 
 
 export default function Canvas() {
@@ -781,12 +796,10 @@ useEffect(() => {
                           id={`draggable-${content.id}`}
                           initialX={positions[content.id]?.x || 0}
                           initialY={positions[content.id]?.y || 0}
-                          onDragEnd={(pos) => handleDragEnd( `draggable-${content.id}` , pos)}
-                      >
+                          onDragEnd={(pos) => handleDragEnd( `draggable-${content.id}` , pos)}>
                         <DynamicComponent {...content} id={`draggable-${content.id}`} />
-                        </Draggable>
-                    ))}
-                  
+                      </Draggable>
+                    ))}  
               <Typography variant = "undefined" className="tracking-wider absolute ---warp-dev-paragraph draggable z-[999]">lorem ipsum dolor sit amet</Typography>
             </div>
                 </TargetSurface>
@@ -880,7 +893,7 @@ useEffect(() => {
           <div className='menu absolute top-[50%] right-[50%] z-[99999] bg-[#333] flex flex-row text-[2rem] h-16 items-center' style={{fontSize:"10.5rem"}}>
             <Menubar className={`bg-[#333] border-none h-full ${inter.className} tracking-wide text-[#efefef] menu-div`}>
               <MenubarMenu>
-                <MenubarTrigger className='text-[1.5rem]'>Size</MenubarTrigger>
+                <MenubarTrigger className='text-[1.5rem] h-full'>Size</MenubarTrigger>
                 <MenubarContent>
                   <MenubarItem className="text-2xl">
                     Small <MenubarShortcut className='text-[1.2rem] tracking-wide'>15px</MenubarShortcut>
@@ -904,10 +917,10 @@ useEffect(() => {
                         onClick={handleEventPropagation}
                         onFocus={handleEventPropagation}
                         onMouseMove={handleEventPropagation}
-                        className={`h-full w-[75%] border-solid border-[0.1rem] focus:outline-none border-black px-0 py-0 mx-0 my-0 inline-block text-[1.2rem] tracking-wide ${inter.className}`}
+                        className={`h-full w-[55%] border-solid border-[0.1rem] focus:outline-none border-black px-0 py-0 mx-0 my-0 inline-block text-[1.2rem] tracking-wide ${inter.className}`}
                         maxLength={3}
                         ></input>
-                        <div className='flex justify-end flex-row'>
+                        <div className='flex flex-row justify-end'>
                           <svg
                           onClick={handleOpenMenu}
                           onFocus={handleEventPropagation}
@@ -920,23 +933,17 @@ useEffect(() => {
                 </MenubarContent>
               </MenubarMenu>
             </Menubar>
-            <ToggleGroup type="multiple" className='gap-0 ml-4'>
+            <ToggleGroup type="multiple" className='h-full gap-0 ml-4'>
               <ToggleGroupItem value="bold" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full w-full" aria-label="Toggle bold">
-                <Bold className="h-10 w-10" color="#efefef" />
+                <Bold className="w-10 h-10" color="#efefef" />
               </ToggleGroupItem>
               <ToggleGroupItem value="italic" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full"  aria-label="Toggle italic">
-                <Italic className="h-10 w-10" color="#efefef" />
+                <Italic className="w-10 h-10" color="#efefef" />
               </ToggleGroupItem>
               <ToggleGroupItem value="underline" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full" aria-label="Toggle underline">
-                <Underline className="h-10 w-10" color="#efefef" />
+                <Underline className="w-10 h-10" color="#efefef" />
               </ToggleGroupItem>
             </ToggleGroup>
-            <Select open={dropdown} onOpenChange={setDropdown}>
-              <SelectContent>
-                <SelectItem value="px">px</SelectItem>
-                <SelectItem value="rem">rem (10px)</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
       </>
   );

@@ -1,8 +1,7 @@
-import NextAuth from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
+import { GET } from './route';
+import NextAuth from 'next-auth/next'
 import { authConfig } from '../../../../auth.config'
 
-
-export const handler : any = NextAuth(authConfig)
+export const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }

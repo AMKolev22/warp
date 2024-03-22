@@ -2,15 +2,15 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { Inter } from 'next/font/google'
-import transparent from "../../../public/logo-transparent-white.svg"
+import transparent from "../../public/logo-transparent-white.svg"
 import  Image  from 'next/image'
 import { signOut } from 'next-auth/react'
-import link from "../../../public/link.svg"
-import heading from "../../../public/heading.svg"
-import paragraph from "../../../public/paragraph.svg"
+import link from "../../public/link.svg"
+import heading from "../../public/heading.svg"
+import paragraph from "../../public/paragraph.svg"
 import { useDrag, useDrop } from 'react-dnd'
 import React from 'react'
-import "../../../styles/drag.css"
+import "../../styles/drag.css"
 import { Typography } from '@material-tailwind/react'
 import interact from 'interactjs'
 const inter = Inter({
@@ -223,7 +223,7 @@ function Draggable ({children} : {children: React.ReactNode}){
       <div className='flex flex-row'>
         <div className="toolbar flex flex-row w-fit bg-[#292929]" style={{backgroundColor: "#292929"}}>
           <div className='flex flex-col border-solid h-screen border-r-[0.1rem] border-[#888] border-opacity-50'>
-            <div className=" ml-0 text-left">
+            <div className="ml-0 text-left ">
               <Menu as="div" className="relative inline-block text-left">
                 <div className='border-solid border-b-[0.1rem] border-[#888] rounded-xs border-opacity-60 z-[999]'>
                   <Menu.Button className={` ${inter.className} inline-flex w-full justify-center rounded-lg px-4 py-2 text-3xl font-normal text-[#efefef] focus:outline-none focus-visible:ring-2 z-[999]`}>
@@ -252,12 +252,12 @@ function Draggable ({children} : {children: React.ReactNode}){
                           >
                             {active ? (
                               <EditActiveIcon
-                                className="mr-4 h-5 w-5"
+                                className="w-5 h-5 mr-4"
                                 aria-hidden="true"
                               />
                             ) : (
                               <EditInactiveIcon
-                                className="mr-4 h-5 w-5"
+                                className="w-5 h-5 mr-4"
                                 aria-hidden="true"
                               />
                             )}
@@ -270,12 +270,12 @@ function Draggable ({children} : {children: React.ReactNode}){
                 </Transition>
               </Menu>
             </div>
-            <div className='bottom fixed bottom-0 left-0'>
+            <div className='fixed bottom-0 left-0 bottom'>
               <div className="">
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
                     <Menu.Button className={` ${inter.className} inline-flex w-full justify-center rounded-lg px-2 py-2 text-3xl font-normal text-[#efefef] focus:outline-none focus-visible:ring-2`}>
-                      <div className='ml-1 opacity-90 pt-2'>
+                      <div className='pt-2 ml-1 opacity-90'>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-14 h-14">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
@@ -303,12 +303,12 @@ function Draggable ({children} : {children: React.ReactNode}){
                             >
                               {active ? (
                                 <EditActiveIcon
-                                  className="mr-4 h-5 w-5"
+                                  className="w-5 h-5 mr-4"
                                   aria-hidden="true"
                                 />
                               ) : (
                                 <EditInactiveIcon
-                                  className="mr-4 h-5 w-5"
+                                  className="w-5 h-5 mr-4"
                                   aria-hidden="true"
                                 />
                               )}
@@ -323,13 +323,13 @@ function Draggable ({children} : {children: React.ReactNode}){
               </div>
             </div>
           </div>
-          <div className='w-[15vw] font-semibold'><h1 className= {`text-[1.5rem] text-[#efefef] ${inter.className} tracking-wider mt-[3.2rem] border-solid border-r-[0.1rem] border-y-[0.1rem] border-[#888] border-opacity-50`}><span className="py-6 inline-block ml-4">Add</span></h1>
+          <div className='w-[15vw] font-semibold'><h1 className= {`text-[1.5rem] text-[#efefef] ${inter.className} tracking-wider mt-[3.2rem] border-solid border-r-[0.1rem] border-y-[0.1rem] border-[#888] border-opacity-50`}><span className="inline-block py-6 ml-4">Add</span></h1>
           <Menu as="div" className="relative inline-block text-left">
       <div className='border-solid border-r-[0.1rem] border-y-[0.1rem] border-[#888] border-opacity-50 w-[15vw]'>
         <div className="">
           <div className='text-left'>
             <Menu.Button className={` ${inter.className} inline-flex w-full rounded-lg px-2 py-2 text-3xl font-semibold text-[#efefef] focus:outline-none focus-visible:ring-2 `}>
-              <div className='ml-1 opacity-100 pt-2 font-semibold'>
+              <div className='pt-2 ml-1 font-semibold opacity-100'>
                 <h1 className={`text-[1.5rem] text-[#efefef] ${inter.className} tracking-wider py-4`}>Typography</h1>
               </div>
             </Menu.Button>
@@ -344,7 +344,7 @@ function Draggable ({children} : {children: React.ReactNode}){
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items className="absolute left-0 bottom-0 -mb-40 w-[15vw] bg-[#292929] focus:outline-none flex flex-col pl-2 border-[#888] rounded-none">
-              <div className="px-0 py-0 flex font-medium">
+              <div className="flex px-0 py-0 font-medium">
                     <DraggableComponent>
                       <Menu.Item>
                         {({ active }) => (
@@ -408,7 +408,7 @@ function Draggable ({children} : {children: React.ReactNode}){
     </div>
         </div>
         <TargetSurface> 
-                  <div className="canvas bg-yellow-50 w-full h-screen relative" id="canvas" ref={surfaceRef}>
+                  <div className="relative w-full h-screen canvas bg-yellow-50" id="canvas" ref={surfaceRef}>
                     {dynamicContent.map((content) => (
                       <Draggable key={content.id}>
                         <DynamicComponent {...content} />

@@ -1,7 +1,6 @@
 "use client"
 import { toast } from "sonner"
 import React, { useEffect } from 'react';
-import { FollowerPointerCard } from "../../../components/ui/following-pointer";
 
 
 
@@ -59,13 +58,7 @@ useEffect(() => {
 
   return (
     <div className="w-screen h-screen">
-    <FollowerPointerCard
-        title={
-          <TitleComponent
-            title={"Title"}
-          />
-        }
-      ></FollowerPointerCard>
+      <></>
     </div>
   );
 };

@@ -1,9 +1,9 @@
-import { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 import GitlabProvider from 'next-auth/providers/gitlab';
+import { AuthOptions, NextAuthOptions } from "next-auth";
  
-export const authConfig : NextAuthOptions = {
+export const authConfig : AuthOptions | NextAuthOptions = {
   pages: {
     signIn: '/authentication/sign',
   },
