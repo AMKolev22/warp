@@ -1,9 +1,8 @@
 "use client"
 import React, { createContext } from 'react';
 import { Fragment, useEffect, useRef, useState, useContext } from 'react'
-import interact from 'interactjs'
 import { useDraggableContext } from './draggableContext';
-
+import interact from 'interactjs';
 
 
 
@@ -11,8 +10,12 @@ export default function Draggable({ children, onDragEnd, id, initialX = 0, initi
   const { isDraggable } = useDraggableContext();
   const [currentX, setCurrentX] = useState(initialX);
   const [currentY, setCurrentY] = useState(initialY);
+  const [el, setEl] = useState<Element | HTMLElement | null>(null);
 
   useEffect(() => {
+  if (typeof document !== 'undefined') {
+    setEl(document.querySelector('.draggable'));
+  }
     if (!isDraggable) {
       return; 
     }
@@ -68,7 +71,6 @@ export default function Draggable({ children, onDragEnd, id, initialX = 0, initi
         ]
       });
 
-    const el = document.querySelector('.draggable');
     if (el) {
       el.style.transform = `translate(${initialX}px, ${initialY}px)`;
       el.setAttribute('data-x', initialX);

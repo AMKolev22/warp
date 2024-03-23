@@ -24,7 +24,6 @@ import Link from 'next/link'
 import divImg from "../../../public/log-in.svg"
 import image from "../../../public/log-in.svg"
 import videoImg from "../../../public/log-in.svg"
-import interact from 'interactjs'
 import cursor from "../../../public/cursor.svg"
 import grab from "../../../public/grab.svg"
 import typography from "../../../public/Typography.svg"
@@ -56,6 +55,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import close from "../../../public/close-icon.svg"
+import interact from 'interactjs'
 import { useRouter } from 'next/navigation'
 import { Bold, Italic, Underline } from "lucide-react"
 import {
@@ -98,32 +98,19 @@ const paragraphId = 'paragraph-unique-id';
 const COMPONENT_MAP = { Typography, Link, Card : "div", Image : "img" };
 
 
-const DynamicComponent = memo(function DynamicComponent({ component, props, id }: { component: any, props: any, id: string }) {
-  const [localProps, setLocalProps] = useState(props);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const Component = COMPONENT_MAP[component];
-  useEffect(() => {
-    let itemID : string = id.replace("draggable-", "");
-    console.log(itemID)
-    const storedProps = localStorage.getItem(itemID);
-    if (storedProps) {
-      console.log(`Stored props: ${storedProps}`)
-      const parsedProps = JSON.parse(storedProps);
-      setLocalProps(parsedProps.props);
-      setPosition({ x: parsedProps.x, y: parsedProps.y });
-      console.log(parsedProps)
-    }
-  }, [id]);
 
+const DynamicComponent = ({ component, props, x, y, id }) => {
+  const Component = COMPONENT_MAP[component];
   return (
-    <Component {...localProps} style={{ position: 'absolute', left: `${position.x}px`, top: `${position.y}px` }} id = {id} />
+      <>
+        <Component {...props} style={{ position: 'absolute', left: `${x}px`, top: `${y}px` }} id = {id} />
+      </>
   );
-});
+};
 
 
 
 export default function Canvas() {
-
   const router = useRouter();
   const [isSelected, setIsSelected] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -155,7 +142,10 @@ export default function Canvas() {
   const [width, setWidth] = useState(20);
   const [height, setHeight] = useState(20);
 
-
+  const setTextSmall = () => {
+  console.log("Small");
+  }
+  
   const detectID = (event) => {
     let element = event.target;
 
@@ -165,6 +155,7 @@ export default function Canvas() {
         setId(idEl);
         setIsSelected(!isSelected)
         console.log(isSelected);
+        console.log(idEl);
         if (element.getAttribute('data-border-applied') === 'true') {
           element.removeAttribute('data-border-applied');
         } else {
@@ -890,61 +881,68 @@ useEffect(() => {
                 </AlertDialogContent>
             </AlertDialogPortal>
           </AlertDialog>
-          <div className='menu absolute top-[50%] right-[50%] z-[99999] bg-[#333] flex flex-row text-[2rem] h-16 items-center' style={{fontSize:"10.5rem"}}>
-            <Menubar className={`bg-[#333] border-none h-full ${inter.className} tracking-wide text-[#efefef] menu-div`}>
-              <MenubarMenu>
-                <MenubarTrigger className='text-[1.5rem] h-full'>Size</MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem className="text-2xl">
-                    Small <MenubarShortcut className='text-[1.2rem] tracking-wide'>15px</MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarItem className='text-3xl'>
-                    Md <MenubarShortcut className='text-[1.2rem] tracking-wide'>18.75px</MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarItem className='text-4xl'>
-                    Lg <MenubarShortcut className='text-[1.2rem] tracking-wide'>22.5px</MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarSub>
-                    <MenubarSubTrigger className='text-[1.2rem]'>Custom</MenubarSubTrigger>
-                    <MenubarSubContent className='w-[70%] hover:bg-none'>
-                      <MenubarItem
-                        onClick={handleEventPropagation}
-                        onFocus={handleEventPropagation}
-                        className='px-0 py-0 hover:bg-none w-[100%]'
-                      >
-                        <input
-                        onClick={handleEventPropagation}
-                        onFocus={handleEventPropagation}
-                        onMouseMove={handleEventPropagation}
-                        className={`h-full w-[55%] border-solid border-[0.1rem] focus:outline-none border-black px-0 py-0 mx-0 my-0 inline-block text-[1.2rem] tracking-wide ${inter.className}`}
-                        maxLength={3}
-                        ></input>
-                        <div className='flex flex-row justify-end'>
-                          <svg
-                          onClick={handleOpenMenu}
+          <Draggable
+            id="menu"
+            onDragEnd={(pos) => handleDragEnd( `menu` , pos)}
+            initialX={0}
+            initialY={0}
+          >
+            <div className='menu absolute top-[50%] right-[50%] z-[99999] bg-[#333] flex flex-row text-[2rem] h-16 items-center' style={{fontSize:"10.5rem"}} id = "menu">
+              <Menubar className={`bg-[#333] border-none h-full ${inter.className} tracking-wide text-[#efefef] menu-div`}>
+                <MenubarMenu>
+                  <MenubarTrigger className='text-[1.5rem] h-full'>Size</MenubarTrigger>
+                  <MenubarContent>
+                    <MenubarItem className="text-2xl" onClick={setTextSmall}>
+                      Small <MenubarShortcut className='text-[1.2rem] tracking-wide'>15px</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem className='text-3xl'>
+                      Md <MenubarShortcut className='text-[1.2rem] tracking-wide'>18.75px</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem className='text-4xl'>
+                      Lg <MenubarShortcut className='text-[1.2rem] tracking-wide'>22.5px</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarSub>
+                      <MenubarSubTrigger className='text-[1.2rem]'>Custom</MenubarSubTrigger>
+                      <MenubarSubContent className='w-[70%] hover:bg-none'>
+                        <MenubarItem
+                          onClick={handleEventPropagation}
                           onFocus={handleEventPropagation}
-                          className='absolute right-1 top-0 bottom-[50%]'
-                          width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-                        </div>
-                      </MenubarItem>
-                    </MenubarSubContent>
-                  </MenubarSub>
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
-            <ToggleGroup type="multiple" className='h-full gap-0 ml-4'>
-              <ToggleGroupItem value="bold" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full w-full" aria-label="Toggle bold">
-                <Bold className="w-10 h-10" color="#efefef" />
-              </ToggleGroupItem>
-              <ToggleGroupItem value="italic" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full"  aria-label="Toggle italic">
-                <Italic className="w-10 h-10" color="#efefef" />
-              </ToggleGroupItem>
-              <ToggleGroupItem value="underline" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full" aria-label="Toggle underline">
-                <Underline className="w-10 h-10" color="#efefef" />
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
+                          className='px-0 py-0 hover:bg-none w-[100%]'
+                        >
+                          <input
+                          onClick={handleEventPropagation}
+                          onFocus={handleEventPropagation}
+                          onMouseMove={handleEventPropagation}
+                          className={`h-full w-[55%] border-solid border-[0.1rem] focus:outline-none border-black px-0 py-0 mx-0 my-0 inline-block text-[1.2rem] tracking-wide ${inter.className}`}
+                          maxLength={3}
+                          ></input>
+                          <div className='flex flex-row justify-end'>
+                            <svg
+                            onClick={handleOpenMenu}
+                            onFocus={handleEventPropagation}
+                            className='absolute right-1 top-0 bottom-[50%]'
+                            width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                          </div>
+                        </MenubarItem>
+                      </MenubarSubContent>
+                    </MenubarSub>
+                  </MenubarContent>
+                </MenubarMenu>
+              </Menubar>
+              <ToggleGroup type="multiple" className='h-full gap-0 ml-4'>
+                <ToggleGroupItem value="bold" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full w-full" aria-label="Toggle bold">
+                  <Bold className="w-10 h-10" color="#efefef" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="italic" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full"  aria-label="Toggle italic">
+                  <Italic className="w-10 h-10" color="#efefef" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="underline" className="hover:bg-[#888] data-[state=on]:bg-[#888] rounded-none h-full" aria-label="Toggle underline">
+                  <Underline className="w-10 h-10" color="#efefef" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </Draggable>
       </>
   );
 }
